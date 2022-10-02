@@ -1,7 +1,7 @@
 import { verify as baseVerify } from '../../verify';
 import { Web3TokenVerifyOptions } from '../../types';
 import { Web3TokenError } from '../../errors';
-import ethers from 'ethers';
+import { recoverAddress } from '@ethersproject/transactions';
 
 export const verify = (token: string, options?: Web3TokenVerifyOptions) => {
   return baseVerify(token, {
@@ -13,7 +13,7 @@ export const verify = (token: string, options?: Web3TokenVerifyOptions) => {
 const messageSignatureToAddress = async (message: string, signature: string) => {
   if (!signature) throw new Web3TokenError('w3t signature is required');
   try {
-    const recoveredAddress = ethers.utils.recoverAddress(message, signature);
+    const recoveredAddress = recoverAddress(message, signature);
     return recoveredAddress.toLowerCase();
     
   } catch(err) {
