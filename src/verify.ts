@@ -1,10 +1,10 @@
 import { TokenExpiredError, TokenPrematureError, Web3TokenError } from './errors';
-import { Web3TokenVerifyOptions } from './types';
+import { MaybePromise, Web3TokenVerifyOptions } from './types';
 import { optionsToPayload, payloadToERC4361Message, web3TokenDecode } from './utils';
 
 
 export interface VerifyProps extends Web3TokenVerifyOptions {
-  messageSignatureToAddress: (message: string, signature: string) => Promise<string>;
+  messageSignatureToAddress: (message: string, signature: string) => MaybePromise<string>;
 }
 
 export const verify = async (token: string, options: VerifyProps) => {

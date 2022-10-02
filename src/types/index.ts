@@ -22,3 +22,5 @@ export interface Web3TokenVerifyOptions {
   domain?: string | string[];
   statement?: string;
 }
+
+export type MaybePromise<T> = Promise<T> | T;

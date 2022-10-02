@@ -1,4 +1,4 @@
-import { verify as verifyBase } from '../verify';
+import { verify as baseVerify } from '../../verify';
 import {
   hashPersonalMessage,
   fromRpcSig,
@@ -6,17 +6,17 @@ import {
   publicToAddress,
   bufferToHex
 } from '@ethereumjs/util';
-import { Web3TokenVerifyOptions } from '../types';
-import { Web3TokenError } from '../errors';
+import { Web3TokenVerifyOptions } from '../../types';
+import { Web3TokenError } from '../../errors';
 
 export const verify = (token: string, options?: Web3TokenVerifyOptions) => {
-  return verifyBase(token, {
+  return baseVerify(token, {
     ...options,
     messageSignatureToAddress,
   })
 }
 
-export const messageSignatureToAddress = async (message: string, signature: string) => {
+const messageSignatureToAddress = async (message: string, signature: string) => {
   if (!signature) throw new Web3TokenError('w3t signature is required');
   try {
 
