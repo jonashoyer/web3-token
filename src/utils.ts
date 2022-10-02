@@ -1,6 +1,10 @@
 import ms from 'ms';
 import { v4 as uuidv4 } from 'uuid';
+import { Web3TokenError } from './errors';
 import { Web3TokenPayload, Web3TokenSignOptions } from './types';
+
+
+export type TokenPayload = Record<string, string | number | boolean>;
 
 export const asciiToBase64 = (str: string) => {
   if (typeof btoa === 'undefined') {
@@ -38,7 +42,7 @@ export const base64ToHex = (base64: string) => {
 }
 
 
-export const web3TokenEncode = (payload: string | {}, signature: string) => {
+export const web3TokenEncode = (payload: string | TokenPayload, signature: string) => {
   const data = stripBase64Padding(asciiToBase64(typeof payload === "string" ? payload : JSON.stringify(payload)));
   return [
     data,
@@ -46,8 +50,11 @@ export const web3TokenEncode = (payload: string | {}, signature: string) => {
   ].join('.')
 }
 
-export const web3TokenDecode = <T = {}>(token: string): { payload: T, signature: string } => {
+export const web3TokenDecode = <T = TokenPayload>(token: string): { payload: T, signature: string } => {
   const [payload, signature] = token.split('.');
+  if (!payload) throw new Web3TokenError('Token missing payload');
+  if (!signature) throw new Web3TokenError('Token missing signature');
+
   const parse = (val: string) => val.startsWith('{') ? JSON.parse(val) : val; 
   return {
     payload: parse(base64ToASCII(payload)),
