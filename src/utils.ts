@@ -4,7 +4,7 @@ import { Web3TokenError } from './errors';
 import { Web3TokenPayload, Web3TokenSignOptions } from './types';
 
 
-export type TokenPayload = Record<string, string | number | boolean>;
+export type TokenPayload = Record<string, string | number | boolean | undefined>;
 
 export const asciiToBase64 = (str: string) => {
   if (typeof btoa === 'undefined') {
