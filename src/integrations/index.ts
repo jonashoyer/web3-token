@@ -1,3 +1,3 @@
-export * as ethereumjs from './ethereumjs';
-export * as ethers from './ethers';
-export * as web3 from './web3';
+export * as EthereumjsIntegration from './ethereumjs';
+export * as EthersIntegration from './ethers';
+export * as Web3Integration from './web3';
