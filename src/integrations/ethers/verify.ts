@@ -3,7 +3,7 @@ import { Web3TokenVerifyOptions } from '../../types';
 import { Web3TokenError } from '../../errors';
 import { recoverAddress } from '@ethersproject/transactions';
 
-export const verify = (token: string, options?: Web3TokenVerifyOptions) => {
+export const verify = <T extends string>(token: string, options?: Web3TokenVerifyOptions<T>) => {
   return baseVerify(token, {
     ...options,
     messageSignatureToAddress,

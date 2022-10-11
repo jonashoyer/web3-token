@@ -3,7 +3,7 @@ import { Web3TokenVerifyOptions } from '../../types';
 import { Web3TokenError } from '../../errors';
 import type Web3 from 'web3';
 
-export const verify = (web3: Web3, token: string, options?: Web3TokenVerifyOptions) => {
+export const verify = <T extends string>(web3: Web3, token: string, options?: Web3TokenVerifyOptions<T>) => {
   return baseVerify(token, {
     ...options,
     messageSignatureToAddress: (msg: string, sig: string) => messageSignatureToAddress(web3, msg, sig),

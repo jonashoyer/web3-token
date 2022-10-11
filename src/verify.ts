@@ -26,6 +26,11 @@ export const verify = async <T extends string>(token: string, options: VerifyPro
     if (payload.notBefore > Date.now()) throw new TokenPrematureError(payload.notBefore);
   }
 
+  if (options.customFields){
+    options.customFields.forEach(key => {
+      if (typeof payload[key] == 'undefined') throw new Web3TokenError(`Custom field '${key}' must be defined in token payload`);
+    })
+  }
   const customFields = extractCustomFields(payload, options.customFields ?? []);
 
   const message = payloadToERC4361Message(payload, customFields, options?.statement);

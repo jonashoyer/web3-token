@@ -75,7 +75,7 @@ export const isBase64 = (str: string) => {
 export const payloadToERC4361Message = (value: Web3TokenPayload, customFields?: Record<string, string>, statement?: string) => {
   return [
     { value: value.statement ?? statement },
-    ...(sortCustomFields(Object.entries(customFields ?? {})).map(([name, value]) => ({ name, value }))),
+    ...(sortCustomFields(Object.entries(customFields ?? {})).map(([name, value]) => ({ name: formatCustomFieldName(name), value }))),
     { value: value.expiresAt && new Date(secondsToMilliseconds(value.expiresAt)).toUTCString(), name: 'Expires at' },
     { value: value.notBefore && new Date(secondsToMilliseconds(value.notBefore)).toUTCString(), name: 'Not before' },
     { value: typeof value.issuedAt == 'number' && new Date(secondsToMilliseconds(value.issuedAt)).toUTCString(), name: 'Issued at' },
@@ -103,6 +103,10 @@ export const optionsToPayload = (address: string, { expiresIn, omitStatementPayl
 
 export const extractCustomFields = (payload: TokenPayload, customFields: string[]) => {
   return Object.fromEntries(sortCustomFields(customFields).map(key => ([key, payload[key] as string])));
+}
+
+export const formatCustomFieldName = (name: string) => {
+  return name.charAt(0).toUpperCase() + name.replace( /([A-Z])/g, " $1" ).slice(1);
 }
 
 type TimeParser = {
