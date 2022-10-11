@@ -2,6 +2,9 @@ export type Web3TokenPayload = { address: string } & Pick<Web3TokenSignOptions, 
 
 
 export interface Web3TokenSignOptions {
+
+  customFields?: Record<string, string>;
+
   expiresIn?: number | string;
   expiresAt?: number;
 
@@ -18,7 +21,9 @@ export interface Web3TokenSignOptions {
   omitStatementPayload?: boolean;
 }
 
-export interface Web3TokenVerifyOptions {
+export interface Web3TokenVerifyOptions<T extends string> {
+  customFields?: T[];
+
   domain?: string | string[];
   statement?: string;
 }

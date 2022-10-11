@@ -72,9 +72,10 @@ export const isBase64 = (str: string) => {
   return base64regex.test(str);
 }
 
-export const payloadToERC4361Message = (value: Web3TokenPayload, statement?: string) => {
+export const payloadToERC4361Message = (value: Web3TokenPayload, customFields?: Record<string, string>, statement?: string) => {
   return [
     { value: value.statement ?? statement },
+    ...(sortCustomFields(Object.entries(customFields ?? {})).map(([name, value]) => ({ name, value }))),
     { value: value.expiresAt && new Date(secondsToMilliseconds(value.expiresAt)).toUTCString(), name: 'Expires at' },
     { value: value.notBefore && new Date(secondsToMilliseconds(value.notBefore)).toUTCString(), name: 'Not before' },
     { value: typeof value.issuedAt == 'number' && new Date(secondsToMilliseconds(value.issuedAt)).toUTCString(), name: 'Issued at' },
@@ -89,8 +90,9 @@ export const payloadToERC4361Message = (value: Web3TokenPayload, statement?: str
     .join('\n\n');
 }
 
-export const optionsToPayload = (address: string, { expiresIn, omitStatementPayload, ...options }: Web3TokenSignOptions, applyOmitStatement = false) => ({
+export const optionsToPayload = (address: string, { expiresIn, omitStatementPayload, customFields, ...options }: Web3TokenSignOptions, applyOmitStatement = false) => ({
   ...options,
+  ...customFields,
   expiresAt: millisecondsToSeconds(expiresIn ? Date.now() + (typeof expiresIn == 'string' ? ms(expiresIn) : expiresIn) : options.expiresAt),
   nonce: options.nonce === true ? uuidv4() : (options.nonce ? options.nonce : undefined),
   issuedAt: millisecondsToSeconds(options.issuedAt === true ? Date.now() : (options.issuedAt ? options.issuedAt : undefined)),
@@ -98,6 +100,10 @@ export const optionsToPayload = (address: string, { expiresIn, omitStatementPayl
   statement: applyOmitStatement && omitStatementPayload ? undefined : options.statement,
   address,
 })
+
+export const extractCustomFields = (payload: TokenPayload, customFields: string[]) => {
+  return Object.fromEntries(sortCustomFields(customFields).map(key => ([key, payload[key] as string])));
+}
 
 type TimeParser = {
   (num: number): number;
@@ -113,4 +119,13 @@ const millisecondsToSeconds: TimeParser = (milliseconds): any => {
 const secondsToMilliseconds: TimeParser = (seconds): any => {
   if (typeof seconds == 'undefined') return undefined;
   return seconds * 1000;
+}
+
+const sortCustomFields = <T extends string[] | Array<[string, string]>>(customFields: T): T => {
+  return [...customFields].sort((a, b) => {
+    const x = typeof a == 'string' ? a : a[0];
+    const y = typeof b == 'string' ? b : b[0];
+
+    return x.localeCompare(y);
+  }) as any;
 }

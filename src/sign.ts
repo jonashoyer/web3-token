@@ -8,7 +8,7 @@ export const sign = async (account: string, signingMethod: (message: string) => 
 
   if (!account) throw new Web3TokenError('no account selected');
 
-  const message = payloadToERC4361Message(optionsToPayload(account.toLowerCase(), options));
+  const message = payloadToERC4361Message(optionsToPayload(account.toLowerCase(), options), options.customFields);
   const payload = optionsToPayload(account.toLowerCase(), options, true);
   
   const signature = await signingMethod(message);
