@@ -19,11 +19,11 @@ export const verify = async <T extends string>(token: string, options: VerifyPro
   }
 
   if (payload.expiresAt) {
-    if (payload.expiresAt < Date.now()) throw new TokenExpiredError(payload.expiresAt);
+    if (payload.expiresAt * 1000 < Date.now()) throw new TokenExpiredError(payload.expiresAt);
   }
 
   if (payload.notBefore) {
-    if (payload.notBefore > Date.now()) throw new TokenPrematureError(payload.notBefore);
+    if (payload.notBefore * 1000 > Date.now()) throw new TokenPrematureError(payload.notBefore);
   }
 
   if (options.customFields){
