@@ -90,14 +90,14 @@ export const payloadToERC4361Message = (value: Web3TokenPayload, customFields?: 
     .join('\n\n');
 }
 
-export const optionsToPayload = (address: string, { expiresIn, omitStatementPayload, customFields, ...options }: Web3TokenSignOptions, applyOmitStatement = false) => ({
+export const optionsToPayload = (address: string, { expiresIn, customFields, ...options }: Web3TokenSignOptions) => ({
   ...options,
   ...customFields,
   expiresAt: millisecondsToSeconds(expiresIn ? Date.now() + (typeof expiresIn == 'string' ? ms(expiresIn) : expiresIn) : options.expiresAt),
   nonce: options.nonce === true ? uuidv4() : (options.nonce ? options.nonce : undefined),
   issuedAt: millisecondsToSeconds(options.issuedAt === true ? Date.now() : (options.issuedAt ? options.issuedAt : undefined)),
   notBefore: options.notBefore ? millisecondsToSeconds(options.notBefore) : undefined,
-  statement: applyOmitStatement && omitStatementPayload ? undefined : options.statement,
+  statement: options.statement,
   address,
 })
 
