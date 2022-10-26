@@ -10,6 +10,7 @@
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "dev": "concurrently \"npm:build:esm -- --watch\" \"npm:build:cjs -- --watch\"",
+    "clean": "rimraf dist .turbo node_modules",
     "test": "ts-node src/test.ts"
   },
   "dependencies": {
@@ -23,7 +24,6 @@
     "@typescript-eslint/parser": "^5.38.1",
     "concurrently": "^7.4.0",
     "eslint": "^8.24.0",
-    "tsc": "^2.0.4",
     "typescript": "^4.8.3"
   },
   "peerDependencies": {
