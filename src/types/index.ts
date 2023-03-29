@@ -11,7 +11,7 @@ export interface Web3TokenSignOptions {
   issuedAt?: number | boolean;
 
   notBefore?: number;
-  
+
   statement?: string;
   domain?: string;
   nonce?: number | string | boolean;
@@ -26,6 +26,8 @@ export interface Web3TokenVerifyOptions<T extends string> {
 
   domain?: string | string[];
   statement?: string;
+
+  issuedWithin?: number;
 }
 
 export type MaybePromise<T> = Promise<T> | T;
