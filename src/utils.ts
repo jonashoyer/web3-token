@@ -24,7 +24,7 @@ export const strip0x = (s: string) => s.startsWith('0x') ? s.slice(2) : s;
 export const prefix0x = (s: string) => s.startsWith('0x') ? s : '0x' + s;
 
 export const hexToBase64 = (hex: string) => {
-  return asciiToBase64(hex.match(/\w{2}/g)!.map(function(a) {
+  return asciiToBase64(hex.match(/\w{2}/g)!.map(function (a) {
     return String.fromCharCode(parseInt(a, 16));
   }).join(''));
 }
@@ -55,7 +55,7 @@ export const web3TokenDecode = <T = TokenPayload>(token: string): { payload: T, 
   if (!payload) throw new Web3TokenError('Token missing payload');
   if (!signature) throw new Web3TokenError('Token missing signature');
 
-  const parse = (val: string) => val.startsWith('{') ? JSON.parse(val) : val; 
+  const parse = (val: string) => val.startsWith('{') ? JSON.parse(val) : val;
   return {
     payload: parse(base64ToASCII(payload)),
     signature: prefix0x(base64ToHex(signature).toLowerCase()),
@@ -64,7 +64,7 @@ export const web3TokenDecode = <T = TokenPayload>(token: string): { payload: T, 
 
 export const isW3T = (str: string) => {
   const arr = str.split('.');
-  return arr.length == 2 && arr[1].length == 88 && isBase64(arr[0]) && isBase64(arr[1]);
+  return arr.length == 2 && arr[1]!.length == 88 && isBase64(arr[0]!) && isBase64(arr[1]!);
 }
 
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
@@ -106,7 +106,7 @@ export const extractCustomFields = (payload: TokenPayload, customFields: string[
 }
 
 export const formatCustomFieldName = (name: string) => {
-  return name.charAt(0).toUpperCase() + name.replace( /([A-Z])/g, " $1" ).slice(1);
+  return name.charAt(0).toUpperCase() + name.replace(/([A-Z])/g, " $1").slice(1);
 }
 
 type TimeParser = {
