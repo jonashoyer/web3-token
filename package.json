@@ -11,7 +11,7 @@
     "build": "pnpm run build:esm && pnpm run build:cjs",
     "build:esm": "tsc --moduleResolution node",
     "build:cjs": "tsc --moduleResolution node --module commonjs --outDir dist/cjs",
-    "dev": "concurrently \"pnpm:build:esm -- --watch\" \"pnpm:build:cjs -- --watch\"",
+    "dev": "concurrently \"pnpm:build:esm --watch\" \"pnpm:build:cjs --watch\"",
     "clean": "rimraf dist .turbo node_modules"
   },
   "dependencies": {
